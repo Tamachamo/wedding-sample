@@ -12,29 +12,41 @@
     body { 
       margin: 0; 
       font-family: 'Noto Serif JP', serif; 
-      background-color: #fcfcfc;
+      background-color: #fdfbf9; /* 背景の砂浜に馴染む色 */
     }
 
-    /* 👇 背景画像は固定（Fixed）にして、スクロールしても動かないようにする！ */
+    /* 👇 スマホでは横幅に合わせて全体を表示し、一番上に配置！ */
     .hero-bg {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100vh;
-      background-image: url('./wedding-bg.png'); /* 同じフォルダの画像を読み込み */
-      background-size: cover;
-      background-position: center;
+      background-image: url('./wedding-bg.png');
+      background-size: 100% auto; /* 横幅100%、縦は比率維持 */
+      background-position: top center;
+      background-repeat: no-repeat;
       z-index: 0;
     }
 
-    /* エレガントなガラス風カード（下からせり上がる） */
+    /* エレガントなガラス風カード */
     .content-card {
       position: relative;
       z-index: 20;
-      /* 👇 ここがミソ！画面の高さの55%分、下にずらして配置する */
-      margin-top: 55vh; 
-      background: rgba(255, 255, 255, 0.95); /* 文字が読みやすいように白を強めに */
+      /* 👇 スマホの画面幅に合わせて、ワンちゃんが見える位置（上から80%くらい）からカードを出す */
+      margin-top: 80vw; 
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    /* 💻 PCなどの横長画面用の設定（画面が広いときは全画面表示） */
+    @media (min-width: 768px) {
+      .hero-bg {
+        background-size: cover;
+        background-position: center;
+      }
+      .content-card {
+        margin-top: 55vh;
+      }
     }
 
     /* アニメーション */
