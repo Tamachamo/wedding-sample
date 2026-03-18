@@ -11,76 +11,58 @@
   <style>
     body { 
       margin: 0; 
-      overflow-x: hidden; 
-      /* 👇 ここ！ 同じフォルダにある「wedding-bg.png」を読み込む設定やに！ */
-      background-image: url('./wedding-bg.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      font-family: 'Noto Serif JP', serif; /* 上品な明朝体 */
+      font-family: 'Noto Serif JP', serif; 
+      background-color: #fcfcfc;
     }
 
-    /* 全体をふんわり明るくするオーバーレイ */
-    .bg-overlay {
+    /* 👇 背景画像は固定（Fixed）にして、スクロールしても動かないようにする！ */
+    .hero-bg {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,240,245,0.6));
+      top: 0; left: 0; width: 100%; height: 100vh;
+      background-image: url('./wedding-bg.png'); /* 同じフォルダの画像を読み込み */
+      background-size: cover;
+      background-position: center;
       z-index: 0;
     }
 
-    /* エレガントなガラス風カード（グラスモーフィズム） */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    /* エレガントなガラス風カード（下からせり上がる） */
+    .content-card {
+      position: relative;
+      z-index: 20;
+      /* 👇 ここがミソ！画面の高さの55%分、下にずらして配置する */
+      margin-top: 55vh; 
+      background: rgba(255, 255, 255, 0.95); /* 文字が読みやすいように白を強めに */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
     }
 
     /* アニメーション */
-    @keyframes popIn { 0% { transform: translateY(30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-    .animate-pop-in { animation: popIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-
-    /* 舞い散る光の粒子 */
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-    }
-    .particle {
-      position: absolute;
-      bottom: -10%;
-      background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 50%;
-      animation: floatUp linear infinite;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      z-index: 1;
-    }
+    @keyframes slideUp { 0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    .animate-slide-up { animation: slideUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
   </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen relative flex items-center justify-center p-4">
+<body class="text-gray-800 antialiased relative">
 
-  <div class="bg-overlay"></div>
+  <div class="hero-bg"></div>
 
-  <div id="particles-container" class="absolute inset-0 overflow-hidden pointer-events-none z-10"></div>
-
-  <div class="glass-card relative z-20 p-8 md:p-14 rounded-3xl max-w-lg w-full animate-pop-in text-center border-t-4 border-amber-300">
+  <main class="content-card w-full max-w-lg mx-auto rounded-t-[40px] px-6 py-12 md:p-14 animate-slide-up text-center border-t border-white/50 min-h-screen">
     
-    <div class="mb-8">
-      <p class="text-amber-600 tracking-[0.3em] text-sm font-bold uppercase mb-2" style="font-family: 'Cormorant Garamond', serif;">Save the Date</p>
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-widest">
+    <div class="w-12 h-1 bg-amber-200 mx-auto rounded-full mb-10"></div>
+
+    <div class="mb-10">
+      <p class="text-amber-600 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-3" style="font-family: 'Cormorant Garamond', serif;">Save the Date</p>
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-widest mb-2">
         Yuki & Haruka
       </h1>
-      <p class="text-gray-400 text-sm mt-2 italic" style="font-family: 'Cormorant Garamond', serif;">We are getting married</p>
+      <p class="text-gray-400 text-sm italic" style="font-family: 'Cormorant Garamond', serif;">We are getting married</p>
     </div>
 
-    <div class="h-px w-16 bg-amber-300 mx-auto mb-8"></div>
-
-    <h2 class="text-xl md:text-2xl font-bold mb-6 text-gray-800">
+    <h2 class="text-xl md:text-2xl font-bold mb-8 text-gray-800 tracking-widest">
       大切なお友達の皆様へ
     </h2>
     
-    <p class="text-md md:text-lg leading-loose text-gray-700 font-medium mb-10 text-left md:text-center">
+    <p class="text-md md:text-lg leading-[2.2] text-gray-700 font-medium mb-12 text-left md:text-center px-2">
       いつも温かい応援をありがとうございます。<br><br>
       この度、私たちは結婚式を挙げることになりました。<br>
       大好きな愛犬「マロン」と出会った、<br>
@@ -89,38 +71,17 @@
       ご予定を空けておいていただけると嬉しいです！
     </p>
 
-    <div class="bg-amber-50 rounded-xl p-6 mb-8 border border-amber-100">
-      <p class="font-bold text-gray-800 mb-2">2026年 11月 22日 (日)</p>
-      <p class="text-sm text-gray-600">アニヴェルセル みなとみらい横浜<br>14:00 受付開始 / 15:00 開宴</p>
+    <div class="bg-gradient-to-br from-amber-50 to-orange-50/30 rounded-2xl p-8 mb-10 border border-amber-100/50 shadow-sm">
+      <p class="font-bold text-gray-800 mb-3 text-lg tracking-widest">2026.11.22 Sun</p>
+      <p class="text-sm text-gray-600 leading-relaxed">アニヴェルセル みなとみらい横浜<br>14:00 受付開始 / 15:00 開宴</p>
     </div>
 
-    <a href="#" class="inline-block bg-gray-800 text-white font-bold tracking-widest py-4 px-10 rounded-full hover:bg-amber-600 transition-colors duration-300 shadow-lg mb-4">
+    <a href="#" class="inline-block w-full md:w-auto bg-gray-800 text-white font-bold tracking-widest py-4 px-12 rounded-full hover:bg-amber-600 transition-colors duration-300 shadow-xl mb-4">
       出欠フォームへ進む <i class="fa-solid fa-angle-right ml-2"></i>
     </a>
-    <p class="text-xs text-gray-400 mt-2">※期日：10月10日までにご回答をお願いします</p>
+    <p class="text-xs text-gray-400 mt-3 mb-10">※期日：10月10日までにご回答をお願いします</p>
 
-  </div>
+  </main>
 
-  <script>
-    // 背景に舞う光の粒子を生成するスクリプト
-    const container = document.getElementById('particles-container');
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
-      
-      const size = Math.random() * 6 + 2; // 2px ~ 8px
-      const left = Math.random() * 100; // 0% ~ 100%
-      const delay = Math.random() * 5; // 0s ~ 5s
-      const duration = Math.random() * 8 + 7; // 7s ~ 15s
-
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.left = `${left}%`;
-      particle.style.animationDelay = `${delay}s`;
-      particle.style.animationDuration = `${duration}s`;
-
-      container.appendChild(particle);
-    }
-  </script>
 </body>
 </html>
