@@ -16,7 +16,7 @@
       overflow-x: hidden;
     }
 
-    /* 👇 背景画像を入れるコンテナ（ズームしても枠からはみ出さないため） */
+    /* 背景画像を入れるコンテナ */
     .hero-bg-wrap {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100vh;
@@ -24,15 +24,15 @@
       overflow: hidden; /* ズームのはみ出しを防ぐ */
     }
 
-    /* 👇 背景画像本体！ スマホで切れないように修正＆ゆっくりズーム追加！ */
+    /* 背景画像本体！ 🚨深い呼吸エフェクトを強化！ */
     .hero-bg {
       width: 100%; height: 100%;
       background-image: url('./wedding-bg.png');
-      background-size: 100% auto; /* 🚨スマホの横幅に完璧に合わせる！ */
+      background-size: 100% auto;
       background-position: top center;
       background-repeat: no-repeat;
-      /* ✨ エフェクト1：ゆっくり深呼吸するようにズームする（Ken Burns） */
-      animation: slowZoom 15s ease-in-out infinite alternate;
+      /* ✨ 深い呼吸エフェクト（Ken Burns）: 拡大率を1.15倍に強化、時間は20秒に */
+      animation: deepBreathZoom 20s ease-in-out infinite alternate;
     }
 
     /* 💻 PCなどの横長画面用の設定 */
@@ -46,9 +46,10 @@
       }
     }
 
-    @keyframes slowZoom {
+    /* ✨ 深い呼吸（ズーム）のアニメーション定義（拡大率を1.15倍に） */
+    @keyframes deepBreathZoom {
       0% { transform: scale(1); }
-      100% { transform: scale(1.05); } /* ほんの少しだけ拡大 */
+      100% { transform: scale(1.15); } /* 1.15倍に拡大して『深い呼吸』を表現 */
     }
 
     /* エレガントなガラス風カード */
@@ -73,13 +74,13 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ✨ エフェクト2：文字が順番にフワッと出るシネマティック表示 */
+    /* 文字が順番にフワッと出るシネマティック表示 */
     .reveal-text {
       opacity: 0;
       transform: translateY(15px);
       animation: textFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
-    .delay-1 { animation-delay: 0.6s; } /* カードが出た後に開始 */
+    .delay-1 { animation-delay: 0.6s; }
     .delay-2 { animation-delay: 1.0s; }
     .delay-3 { animation-delay: 1.4s; }
     .delay-4 { animation-delay: 1.8s; }
@@ -88,7 +89,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ✨ エフェクト3：ゴールドラインのキラッと光る反射 */
+    /* ゴールドラインのキラッと光る反射 */
     .gold-shine {
       position: relative;
       overflow: hidden;
@@ -101,7 +102,7 @@
       width: 50%; height: 100%;
       background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
       transform: skewX(-20deg);
-      animation: shine 4s infinite; /* 4秒に1回キラッと光る */
+      animation: shine 4s infinite;
     }
     @keyframes shine {
       0% { left: -100%; }
@@ -137,7 +138,7 @@
 
   <main class="content-card w-full max-w-lg mx-auto rounded-t-[40px] px-6 py-12 md:p-14 text-center border-t border-white/50 min-h-screen">
     
-    <div class="w-16 h-1 gold-shine mx-auto rounded-full mb-10"></div>
+    <div class="gold-shine mx-auto rounded-full mb-10" style="width: 60px; height: 4px;"></div>
 
     <div class="mb-10 reveal-text delay-1">
       <p class="text-amber-600 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-3" style="font-family: 'Cormorant Garamond', serif;">Save the Date</p>
@@ -180,7 +181,7 @@
       const particle = document.createElement('div');
       particle.classList.add('particle');
       
-      const size = Math.random() * 6 + 4; // 少し大きめに
+      const size = Math.random() * 6 + 4;
       const left = Math.random() * 100;
       const delay = Math.random() * 5;
       const duration = Math.random() * 8 + 8;
