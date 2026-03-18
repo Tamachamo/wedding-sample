@@ -16,80 +16,130 @@
       overflow-x: hidden;
     }
 
-    /* 👇 背景画像の設定 */
-    .hero-bg {
+    /* 👇 背景画像を入れるコンテナ（ズームしても枠からはみ出さないため） */
+    .hero-bg-wrap {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100vh;
-      background-image: url('./wedding-bg.png'); /* 同じフォルダの画像を読み込み */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
       z-index: 0;
+      overflow: hidden; /* ズームのはみ出しを防ぐ */
+    }
+
+    /* 👇 背景画像本体！ スマホで切れないように修正＆ゆっくりズーム追加！ */
+    .hero-bg {
+      width: 100%; height: 100%;
+      background-image: url('./wedding-bg.png');
+      background-size: 100% auto; /* 🚨スマホの横幅に完璧に合わせる！ */
+      background-position: top center;
+      background-repeat: no-repeat;
+      /* ✨ エフェクト1：ゆっくり深呼吸するようにズームする（Ken Burns） */
+      animation: slowZoom 15s ease-in-out infinite alternate;
+    }
+
+    /* 💻 PCなどの横長画面用の設定 */
+    @media (min-width: 768px) {
+      .hero-bg {
+        background-size: cover;
+        background-position: center;
+      }
+      .content-card {
+        margin-top: 55vh !important;
+      }
+    }
+
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); } /* ほんの少しだけ拡大 */
     }
 
     /* エレガントなガラス風カード */
     .content-card {
       position: relative;
       z-index: 20;
-      /* 👇 スマホの画面幅に合わせて、カードを少し下（80vw）から出す */
-      margin-top: 80vw; 
-      background: rgba(255, 255, 255, 0.95); /* すりガラス効果 */
+      /* スマホの画面幅に合わせて、ワンちゃんの下から出す */
+      margin-top: 85vw; 
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
       
-      /* ✨ オープニング・アニメーションの設定 */
+      /* カード自体のせり上がり */
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(40px);
       animation: elegantEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-      animation-delay: 0.3s; /* 少し遅らせて開始 */
     }
 
-    /* 💻 PC用の設定（画面が広いときは全画面表示） */
-    @media (min-width: 768px) {
-      .hero-bg {
-        background-size: cover;
-      }
-      .content-card {
-        margin-top: 55vh;
-      }
-    }
-
-    /* ✨ カードがふわりと登場するアニメーション定義 */
     @keyframes elegantEntrance {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ✨ 背景に舞うキラキラエフェクトの定義 */
-    @keyframes floatUp {
+    /* ✨ エフェクト2：文字が順番にフワッと出るシネマティック表示 */
+    .reveal-text {
+      opacity: 0;
+      transform: translateY(15px);
+      animation: textFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    .delay-1 { animation-delay: 0.6s; } /* カードが出た後に開始 */
+    .delay-2 { animation-delay: 1.0s; }
+    .delay-3 { animation-delay: 1.4s; }
+    .delay-4 { animation-delay: 1.8s; }
+
+    @keyframes textFadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ✨ エフェクト3：ゴールドラインのキラッと光る反射 */
+    .gold-shine {
+      position: relative;
+      overflow: hidden;
+      background-color: #fcd34d; /* tailwindのamber-300 */
+    }
+    .gold-shine::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+      transform: skewX(-20deg);
+      animation: shine 4s infinite; /* 4秒に1回キラッと光る */
+    }
+    @keyframes shine {
+      0% { left: -100%; }
+      20% { left: 200%; }
+      100% { left: 200%; }
+    }
+
+    /* 背景に舞う光の粒子 */
+    @keyframes floatUpParticle {
       0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-      10% { opacity: 0.8; }
-      90% { opacity: 0.8; }
+      20% { opacity: 0.6; }
+      80% { opacity: 0.6; }
       100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
     }
     .particle {
       position: absolute;
       bottom: -10%;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0.85);
       border-radius: 50%;
-      animation: floatUp linear infinite;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      pointer-events: none; /* ジャマしないように */
+      animation: floatUpParticle linear infinite;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+      pointer-events: none;
     }
   </style>
 </head>
 <body class="text-gray-800 antialiased relative">
 
-  <div class="hero-bg"></div>
+  <div class="hero-bg-wrap">
+    <div class="hero-bg"></div>
+  </div>
 
   <div id="particles-container" class="absolute inset-0 overflow-hidden z-10"></div>
 
   <main class="content-card w-full max-w-lg mx-auto rounded-t-[40px] px-6 py-12 md:p-14 text-center border-t border-white/50 min-h-screen">
     
-    <div class="w-12 h-1 bg-amber-200 mx-auto rounded-full mb-10"></div>
+    <div class="w-16 h-1 gold-shine mx-auto rounded-full mb-10"></div>
 
-    <div class="mb-10">
+    <div class="mb-10 reveal-text delay-1">
       <p class="text-amber-600 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-3" style="font-family: 'Cormorant Garamond', serif;">Save the Date</p>
       <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-widest mb-2">
         Yuki & Haruka
@@ -97,11 +147,11 @@
       <p class="text-gray-400 text-sm italic" style="font-family: 'Cormorant Garamond', serif;">We are getting married</p>
     </div>
 
-    <h2 class="text-xl md:text-2xl font-bold mb-8 text-gray-800 tracking-widest">
+    <h2 class="text-xl md:text-2xl font-bold mb-8 text-gray-800 tracking-widest reveal-text delay-2">
       大切なお友達の皆様へ
     </h2>
     
-    <p class="text-md md:text-lg leading-[2.2] text-gray-700 font-medium mb-12 text-left md:text-center px-2">
+    <p class="text-md md:text-lg leading-[2.2] text-gray-700 font-medium mb-12 text-left md:text-center px-2 reveal-text delay-3">
       いつも温かい応援をありがとうございます。<br><br>
       この度、私たちは結婚式を挙げることになりました。<br>
       大好きな愛犬「マロン」と出会った、<br>
@@ -110,28 +160,30 @@
       ご予定を空けておいていただけると嬉しいです！
     </p>
 
-    <div class="bg-gradient-to-br from-amber-50 to-orange-50/30 rounded-2xl p-8 mb-10 border border-amber-100/50 shadow-sm transition-transform hover:scale-[1.02]">
+    <div class="bg-gradient-to-br from-amber-50 to-orange-50/30 rounded-2xl p-8 mb-10 border border-amber-100/50 shadow-sm transition-transform hover:scale-[1.02] reveal-text delay-4">
       <p class="font-bold text-gray-800 mb-3 text-lg tracking-widest">2026.11.22 Sun</p>
       <p class="text-sm text-gray-600 leading-relaxed">アニヴェルセル みなとみらい横浜<br>14:00 受付開始 / 15:00 開宴</p>
     </div>
 
-    <a href="#" class="inline-block w-full md:w-auto bg-gray-800 text-white font-bold tracking-widest py-4 px-12 rounded-full hover:bg-amber-600 transition-colors duration-300 shadow-xl mb-4 hover:-translate-y-1 transform">
-      出欠フォームへ進む <i class="fa-solid fa-angle-right ml-2"></i>
-    </a>
-    <p class="text-xs text-gray-400 mt-3 mb-10">※期日：10月10日までにご回答をお願いします</p>
+    <div class="reveal-text delay-4">
+      <a href="#" class="inline-block w-full md:w-auto bg-gray-800 text-white font-bold tracking-widest py-4 px-12 rounded-full hover:bg-amber-600 transition-colors duration-300 shadow-xl mb-4 hover:-translate-y-1 transform">
+        出欠フォームへ進む <i class="fa-solid fa-angle-right ml-2"></i>
+      </a>
+      <p class="text-xs text-gray-400 mt-3 mb-10">※期日：10月10日までにご回答をお願いします</p>
+    </div>
 
   </main>
 
   <script>
     const container = document.getElementById('particles-container');
-    for (let i = 0; i < 25; i++) { // 25個生成
+    for (let i = 0; i < 20; i++) {
       const particle = document.createElement('div');
       particle.classList.add('particle');
       
-      const size = Math.random() * 8 + 3; // 3px ~ 11px
-      const left = Math.random() * 100; // 0% ~ 100%
-      const delay = Math.random() * 5; // 0s ~ 5s
-      const duration = Math.random() * 7 + 7; // 7s ~ 14s
+      const size = Math.random() * 6 + 4; // 少し大きめに
+      const left = Math.random() * 100;
+      const delay = Math.random() * 5;
+      const duration = Math.random() * 8 + 8;
 
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
